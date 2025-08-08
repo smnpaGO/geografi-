@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pemutar Video</title>
+<title>Pemutar Video dengan PIN</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -12,38 +12,55 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        height: 100vh;
         margin: 0;
-        padding: 0;
     }
-    .player-container {
+    .container {
         background-color: #1b263b;
         padding: 20px;
         border-radius: 10px;
-        margin-top: 50px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        text-align: center;
         width: 80%;
-        max-width: 800px;
+        max-width: 600px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
     video {
         width: 100%;
         border-radius: 10px;
         outline: none;
+        margin-top: 15px;
     }
-    h1 {
-        text-align: center;
+    h2 {
         color: #4cc9f0;
     }
 </style>
 </head>
 <body>
 
-<div class="player-container">
-    <h1>Judul Sementara</h1>
+<div class="container" id="video-container" style="display:none;">
+    <h2>Video Geografi</h2>
     <video controls>
         <source src="https://raw.githubusercontent.com/smnpaGO/geografi-/main/VID20250808100135.mp4" type="video/mp4">
         Browser kamu tidak mendukung video ini.
     </video>
 </div>
+
+<script>
+    const correctPIN = "1206"; // PIN benar
+    let entered = false;
+
+    while (!entered) {
+        let input = prompt("Please enter PIN to continue:");
+        if (input === correctPIN) {
+            entered = true;
+            document.getElementById("video-container").style.display = "block";
+            alert("Correct Pin");
+        } else {
+            alert("Wrong PIN, try again");
+        }
+    }
+</script>
 
 </body>
 </html>
