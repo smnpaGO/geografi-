@@ -1,49 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Video Player</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #0d1b2a;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-    }
-    .container {
-        background-color: #1b263b;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        width: 80%;
-        max-width: 400px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-    video {
-        width: 100%;
-        border-radius: 10px;
-        outline: none;
-        margin-top: 15px;
-    }
-    h2 {
-        color: #4cc9f0;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wawancara Geografi</title>
+    <style>
+        /* Mengimpor font dari Google Fonts untuk tampilan yang lebih modern */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        /* Reset CSS dasar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            overflow: hidden; /* Mencegah scrolling */
+            color: #ffffff;
+            /* Latar belakang gradasi biru laut yang bergerak perlahan
+              memberi kesan ombak yang tenang dan estetik.
+            */
+            background: linear-gradient(-45deg, #003973, #005f9e, #0d8abc, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        /* Animasi untuk latar belakang gradasi */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Kontainer utama untuk mengatur layout */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Layar Sambutan (Welcome Screen) */
+        #welcome-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            /* Efek transisi untuk animasi fade out */
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            z-index: 10;
+        }
+
+        #welcome-screen h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        #enter-button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #003973;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #enter-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Konten Utama (Pemutar Video) */
+        #main-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Awalnya disembunyikan */
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            /* Efek transisi untuk animasi fade in */
+            transition: opacity 1s ease-in 0.5s, visibility 1s ease-in 0.5s, transform 1s ease-in 0.5s;
+        }
+        
+        /* Kelas untuk menyembunyikan layar sambutan saat tombol diklik */
+        #welcome-screen.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none; /* Mencegah interaksi setelah disembunyikan */
+        }
+
+        /* Kelas untuk menampilkan konten utama */
+        #main-content.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .video-container {
+            width: 90%;
+            max-width: 960px; /* Batas lebar maksimum video */
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+        }
+        
+        /* Penyesuaian untuk layar kecil (ponsel) */
+        @media (max-width: 768px) {
+            #welcome-screen h1 {
+                font-size: 1.8rem;
+            }
+            .video-container {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Wawancara Video Terdampak</h2>
-    <video controls>
-        <source src="https://raw.githubusercontent.com/smnpaGO/geografi-/main/video/VID-20250812-WA0004.mp4" type="video/mp4">
-        Your browser does not support this video.
-    </video>
-</div>
+    <div class="container">
+        <div id="welcome-screen">
+            <h1>Hasil Wawancara Korban Yang Terdampak</h1>
+            <button id="enter-button">Lihat Video</button>
+        </div>
+
+        <div id="main-content">
+            <div class="video-container">
+                <video controls>
+                    <source src="https://raw.githubusercontent.com/smnpaGO/geografi-/main/video/VID-20250812-WA0004.mp4" type="video/mp4">
+                    Browser Anda tidak mendukung tag video.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mengambil elemen-elemen dari HTML
+        const enterButton = document.getElementById('enter-button');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const mainContent = document.getElementById('main-content');
+
+        // Menambahkan fungsi ketika tombol di-klik
+        enterButton.addEventListener('click', () => {
+            // 1. Tambahkan kelas 'hidden' untuk memulai animasi fade out pada layar sambutan
+            welcomeScreen.classList.add('hidden');
+            
+            // 2. Tambahkan kelas 'visible' untuk memulai animasi fade in pada konten video
+            mainContent.classList.add('visible');
+        });
+    </script>
 
 </body>
 </html>
